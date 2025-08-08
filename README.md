@@ -18,4 +18,8 @@ Update these files with real infrastructure definitions as the project evolves.
 
 ## Required Secrets
 
+- **AZURE_CLIENT_ID** – Service principal client ID for Azure login.
+- **AZURE_CLIENT_SECRET** – Service principal client secret for Azure login.
+- **AZURE_TENANT_ID** – Azure Active Directory tenant ID.
+- **AZURE_SUBSCRIPTION_ID** – Target Azure subscription ID.
 - **TF_PASSPHRASE** – Used to encrypt Terraform plan files in the GitHub Actions workflow.

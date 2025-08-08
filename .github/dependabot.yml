@@ -2,7 +2,8 @@ version: 2
 updates:
   - package-ecosystem: "terraform"
     directories:
-      - "*/**"
+      - "/*"
+      - "/modules/**"
     schedule:
       interval: "weekly"
   - package-ecosystem: "github-actions"

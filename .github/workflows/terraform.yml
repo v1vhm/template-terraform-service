@@ -1,0 +1,14 @@
+name: Terraform
+
+on:
+  pull_request:
+  push:
+    branches: ["main"]
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      # TODO: Add steps for Terraform init/plan/apply using TF-via-PR action

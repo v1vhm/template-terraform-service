@@ -1,6 +1,3 @@
-Thanks! I’ll define a boilerplate Terraform repository structure optimized for Azure that supports flexible environment expansion, uses GitHub Actions for plan and apply with pull request approvals, and includes sensible backend and naming convention suggestions. I’ll also provide templates for module layout, `tfvars` usage, GitHub Environments, and workflow configuration.
-
-
 # Multi-Environment Terraform Repository Boilerplate (Azure Focus)
 
 Organizing a Terraform codebase for multiple Azure environments requires a clear structure and workflow. Below is a recommended **repository structure** and **workflow** that covers core Terraform files, environment-specific configs, local modules, a PR-driven branching strategy, and CI/CD with GitHub Actions (using the **TF-via-PR** workflow) along with GitHub Environments for secrets and approvals.

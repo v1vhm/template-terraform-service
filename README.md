@@ -15,3 +15,7 @@ This repository provides a baseline structure for managing Azure infrastructure 
 - **.github/dependabot.yml** – Dependabot configuration for Terraform and GitHub Actions updates.
 
 Update these files with real infrastructure definitions as the project evolves.
+
+## Required Secrets
+
+- **TF_PASSPHRASE** – Used to encrypt Terraform plan files in the GitHub Actions workflow.

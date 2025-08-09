@@ -49,7 +49,7 @@ jobs:
 
   tf-plan:
     needs: determine-matrix
-    if: ${{ fromJSON(needs.determine-matrix.outputs.plan_matrix)[0].name != 'skip' }}
+    if: ${{ (github.event_name == 'pull_request' || github.event_name == 'pull_request_target') && fromJSON(needs.determine-matrix.outputs.plan_matrix)[0].name != 'skip' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

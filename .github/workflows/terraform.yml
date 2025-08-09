@@ -94,7 +94,8 @@ jobs:
         with:
           working-directory: .
           command: plan
-          arg-var-file: env/${{ matrix.environment.name }}.tfvars
+          arg-var-file: ${{ format('{0}/env/{1}.tfvars', github.workspace, matrix.environment.name) }}
+          arg-backend-config: ${{ format('{0}/env/{1}.state.config', github.workspace, matrix.environment.name) }}
           plan-encrypt: ${{ secrets.TF_PASSPHRASE }}
           validate: true
           format: true
@@ -195,7 +196,8 @@ jobs:
           working-directory: .
           command: apply
           arg-lock: true
-          arg-var-file: env/${{ matrix.environment.name }}.tfvars
+          arg-var-file: ${{ format('{0}/env/{1}.tfvars', github.workspace, matrix.environment.name) }}
+          arg-backend-config: ${{ format('{0}/env/{1}.state.config', github.workspace, matrix.environment.name) }}
           plan-encrypt: ${{ secrets.TF_PASSPHRASE }}
           validate: true
           format: true

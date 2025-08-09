@@ -1,10 +1,10 @@
-# Remote state backend configuration template
-
-# terraform {
-#   backend "azurerm" {
-#     resource_group_name  = "<rg-name>"
-#     storage_account_name = "<storage-account>"
-#     container_name       = "<container>"
-#     key                  = "<statefile>"
-#   }
-# }
+# Remote state backend configuration (partial)
+# Backend settings are provided via environment-specific .state.config files in env/
+terraform {
+  backend "azurerm" {
+    resource_group_name  = ""
+    storage_account_name = ""
+    container_name       = ""
+    key                  = ""
+  }
+}

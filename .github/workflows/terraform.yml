@@ -34,7 +34,7 @@ jobs:
             echo 'matrix=[{"name":"skip"}]' >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          matrix=$(yq e -o=json '.environments | sort_by(.order)' environments.yml 2>/dev/null || echo '[]')
+          matrix=$(yq e -o=json -I=0 '.environments | sort_by(.order)' environments.yml 2>/dev/null || echo '[]')
           if [ "$matrix" = "[]" ]; then
             echo 'matrix=[{"name":"skip"}]' >> "$GITHUB_OUTPUT"
           else

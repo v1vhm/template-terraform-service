@@ -45,6 +45,7 @@ jobs:
     needs: determine-matrix
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         environment: ${{ fromJSON(needs.determine-matrix.outputs.matrix) }}
     environment: ${{ matrix.environment.name }}
@@ -54,6 +55,11 @@ jobs:
       contents: read
       id-token: write
       pull-requests: write
+    env:
+      ARM_USE_OIDC: "true"
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     steps:
       - name: Skip plan
         if: matrix.environment.name == 'skip'
@@ -61,14 +67,6 @@ jobs:
       - name: Checkout repository
         if: matrix.environment.name != 'skip'
         uses: actions/checkout@v4
-
-      - name: Azure login
-        if: matrix.environment.name != 'skip'
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Create plugin cache
         if: matrix.environment.name != 'skip'
@@ -154,6 +152,7 @@ jobs:
     if: github.event_name == 'push' && fromJSON(needs.determine-matrix.outputs.matrix)[0].name != 'skip'
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: true
       max-parallel: 1
       matrix:
         environment: ${{ fromJSON(needs.determine-matrix.outputs.matrix) }}
@@ -164,16 +163,14 @@ jobs:
       contents: read
       id-token: write
       pull-requests: write
+    env:
+      ARM_USE_OIDC: "true"
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Azure login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Create plugin cache
         run: |

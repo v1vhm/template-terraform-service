@@ -4,18 +4,9 @@ name: Terraform
 
 "on":
   pull_request:
-    paths:
-      - '**/*.tf'
-      - '**/*.tfvars'
-      - 'environments.yml'
-      - '.terraform.lock.hcl'
+
   push:
     branches: ["main"]
-    paths:
-      - '**/*.tf'
-      - '**/*.tfvars'
-      - 'environments.yml'
-      - '.terraform.lock.hcl'
 
 jobs:
   determine-matrix:

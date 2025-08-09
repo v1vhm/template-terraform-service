@@ -6,3 +6,6 @@
 # CLI configuration files
 tfplan
 
+# Environment backend configuration files
+*.state.config
+

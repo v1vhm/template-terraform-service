@@ -2,8 +2,18 @@ name: Terraform
 
 on:
   pull_request:
+    paths:
+      - '**/*.tf'
+      - '**/*.tfvars'
+      - 'environments.yml'
+      - '.terraform.lock.hcl'
   push:
     branches: ["main"]
+    paths:
+      - '**/*.tf'
+      - '**/*.tfvars'
+      - 'environments.yml'
+      - '.terraform.lock.hcl'
 
 jobs:
   determine-matrix:
@@ -21,6 +31,7 @@ jobs:
 
   tf-plan:
     needs: determine-matrix
+    if: ${{ needs.determine-matrix.outputs.matrix != '[]' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -70,7 +81,7 @@ jobs:
 
   tf-apply:
     needs: [determine-matrix, tf-plan]
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && needs.determine-matrix.outputs.matrix != '[]'
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1

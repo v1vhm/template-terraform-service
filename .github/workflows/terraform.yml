@@ -49,6 +49,7 @@ jobs:
 
   tf-plan:
     needs: determine-matrix
+    if: ${{ fromJSON(needs.determine-matrix.outputs.plan_matrix)[0].name != 'skip' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -68,34 +69,26 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     steps:
-      - name: Skip plan
-        if: matrix.environment.name == 'skip'
-        run: echo "No Terraform changes or environments to plan."
       - name: Checkout repository
-        if: matrix.environment.name != 'skip'
         uses: actions/checkout@v4
 
       - name: Create plugin cache
-        if: matrix.environment.name != 'skip'
         run: |
           mkdir -p $HOME/.terraform.d/plugin-cache
           echo "TF_PLUGIN_CACHE_DIR=$HOME/.terraform.d/plugin-cache" >> $GITHUB_ENV
 
       - name: Cache Terraform providers
-        if: matrix.environment.name != 'skip'
         uses: actions/cache@v4
         with:
           path: ~/.terraform.d/plugin-cache
           key: terraform-${{ runner.os }}-${{ hashFiles('.terraform.lock.hcl') }}
 
       - name: Setup Terraform
-        if: matrix.environment.name != 'skip'
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_wrapper: false
 
       - name: Terraform plan ${{ matrix.environment.name }}
-        if: matrix.environment.name != 'skip'
         uses: op5dev/tf-via-pr@v13
         with:
           working-directory: .
@@ -108,6 +101,7 @@ jobs:
 
   tf-plan-summary:
     needs: [determine-matrix, tf-plan]
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -138,7 +132,7 @@ jobs:
               core.setOutput('summary', lines.join('\n'));
             }
       - name: Comment summary
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && fromJSON(needs.determine-matrix.outputs.plan_matrix)[0].name != 'skip'
         uses: actions/github-script@v7
         env:
           BODY: ${{ steps.summary.outputs.summary }}

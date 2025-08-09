@@ -3,9 +3,19 @@
 name: Terraform
 
 "on":
-  pull_request: {}
+  pull_request:
+    paths:
+      - '**/*.tf'
+      - '**/*.tfvars'
+      - 'environments.yml'
+      - '.terraform.lock.hcl'
   push:
     branches: ["main"]
+    paths:
+      - '**/*.tf'
+      - '**/*.tfvars'
+      - 'environments.yml'
+      - '.terraform.lock.hcl'
 
 jobs:
   determine-matrix:
@@ -98,8 +108,56 @@ jobs:
           validate: true
           format: true
 
-  tf-apply:
+  tf-plan-summary:
     needs: [determine-matrix, tf-plan]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      actions: read
+    steps:
+      - name: Generate summary
+        id: summary
+        uses: actions/github-script@v7
+        env:
+          MATRIX: ${{ needs.determine-matrix.outputs.matrix }}
+        with:
+          script: |
+            const matrix = JSON.parse(process.env.MATRIX);
+            if (matrix[0].name === 'skip') {
+              core.setOutput('summary', 'No environments were deployed.');
+            } else {
+              const { data } = await github.rest.actions.listJobsForWorkflowRun({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id: context.runId,
+              });
+              const planJobs = data.jobs.filter(j => j.name.startsWith('tf-plan'))
+              const lines = planJobs.map(j => {
+                const name = j.name.replace('tf-plan (environment: ', '').replace(')', '');
+                return `- ${name}: ${j.conclusion}`;
+              });
+              core.setOutput('summary', lines.join('\n'));
+            }
+      - name: Comment summary
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        env:
+          BODY: ${{ steps.summary.outputs.summary }}
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: process.env.BODY,
+            });
+      - name: Log summary
+        if: github.event_name != 'pull_request'
+        run: echo "${{ steps.summary.outputs.summary }}"
+
+  tf-apply:
+    needs: [determine-matrix, tf-plan-summary]
     if: github.event_name == 'push' && fromJSON(needs.determine-matrix.outputs.matrix)[0].name != 'skip'
     runs-on: ubuntu-latest
     strategy:

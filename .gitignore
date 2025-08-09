@@ -9,3 +9,6 @@ tfplan
 # Environment backend configuration files
 *.state.config
 
+
+# Allow example state config for demonstration
+!env/example/example.state.config

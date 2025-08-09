@@ -2,18 +2,17 @@
 
 Store environment-specific Terraform variable definitions in this directory.
 
-Create a separate `.tfvars` file for each environment (e.g., `dev.tfvars`, `staging.tfvars`, `prod.tfvars`).
-This file must contain the following variables:
+Each environment should live in its own subdirectory (e.g., `dev/`, `staging/`, `prod/`). Inside that directory, create:
 
-environment    = "<enviromnent name>"
+- `<environment>.tfvars` containing:
+
+```
+environment    = "<environment name>"
 location       = "<location>"
 resource_group = "<resource group name>"
+```
 
-It can be further customised with additional variables relevant to your deployment.
-
-Each environment must also provide a corresponding `<environment>.state.config` file. This file supplies
-the backend settings for the `azurerm` remote state and is referenced by the workflow. Its contents
-should define the following keys:
+- `<environment>.state.config` providing backend settings for the `azurerm` remote state:
 
 ```
 resource_group_name  = "<resource-group>"
@@ -21,6 +20,6 @@ storage_account_name = "<storage-account>"
 container_name       = "<blob-container>"
 key                  = "<state-file-name>"
 ```
-These `*.state.config` files must be created for each environment but kept out of source control,
-as they may contain sensitive backend details.
+
+These `.tfvars` files can include additional variables as needed. The `.state.config` files typically contain sensitive information and should not be committed to source control. The `example/` folder included here demonstrates the expected structure.
 

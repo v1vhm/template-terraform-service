@@ -12,6 +12,8 @@ location       = "<location>"
 resource_group = "<resource group name>"
 ```
 
+These `.tfvars` files can include additional variables as needed. 
+
 - `<environment>.state.config` providing backend settings for the `azurerm` remote state:
 
 ```
@@ -20,6 +22,4 @@ storage_account_name = "<storage-account>"
 container_name       = "<blob-container>"
 key                  = "<state-file-name>"
 ```
-
-These `.tfvars` files can include additional variables as needed. The `.state.config` files typically contain sensitive information and should not be committed to source control. The `example/` folder included here demonstrates the expected structure.
 

@@ -1,0 +1,11 @@
+# List deployment environments in the order they should be applied.
+# Lower numbers in the "order" field are applied first.
+# Uncomment and customise the entries below to match your environments.
+#
+# environments:
+#   - name: dev
+#     order: 1
+#   - name: staging
+#     order: 2
+#   - name: prod
+#     order: 3

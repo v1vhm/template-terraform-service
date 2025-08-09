@@ -47,6 +47,7 @@ jobs:
     strategy:
       matrix:
         environment: ${{ fromJSON(needs.determine-matrix.outputs.matrix) }}
+    environment: matrix.environment.name
     permissions:
       actions: read
       checks: write

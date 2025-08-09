@@ -14,7 +14,8 @@ jobs:
     permissions:
       contents: read
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      plan_matrix: ${{ steps.set-matrix.outputs.plan_matrix }}
+      apply_matrix: ${{ steps.set-matrix.outputs.apply_matrix }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -31,14 +32,19 @@ jobs:
       - id: set-matrix
         run: |
           if [ "${{ steps.changes.outputs.terraform }}" != "true" ]; then
-            echo 'matrix=[{"name":"skip"}]' >> "$GITHUB_OUTPUT"
+            echo 'plan_matrix=[{"name":"skip","github_environment":"skip"}]' >> "$GITHUB_OUTPUT"
+            echo 'apply_matrix=[{"name":"skip","github_environment":"skip"}]' >> "$GITHUB_OUTPUT"
             exit 0
           fi
           matrix=$(yq e -o=json -I=0 '.environments | sort_by(.order)' environments.yml 2>/dev/null || echo '[]')
           if [ "$matrix" = "[]" ]; then
-            echo 'matrix=[{"name":"skip"}]' >> "$GITHUB_OUTPUT"
+            echo 'plan_matrix=[{"name":"skip","github_environment":"skip"}]' >> "$GITHUB_OUTPUT"
+            echo 'apply_matrix=[{"name":"skip","github_environment":"skip"}]' >> "$GITHUB_OUTPUT"
           else
-            echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+            plan=$(echo "$matrix" | jq '[.[] | {name: .name, github_environment: (.name + "-plan")}]')
+            apply=$(echo "$matrix" | jq '[.[] | {name: .name, github_environment: (.name + "-apply")}]')
+            echo "plan_matrix=$plan" >> "$GITHUB_OUTPUT"
+            echo "apply_matrix=$apply" >> "$GITHUB_OUTPUT"
           fi
 
   tf-plan:
@@ -47,8 +53,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: ${{ fromJSON(needs.determine-matrix.outputs.matrix) }}
-    environment: ${{ matrix.environment.name }}
+        environment: ${{ fromJSON(needs.determine-matrix.outputs.plan_matrix) }}
+    name: tf-plan-${{ matrix.environment.name }}
+    environment: ${{ matrix.environment.github_environment }}
     permissions:
       actions: read
       checks: write
@@ -111,7 +118,7 @@ jobs:
         id: summary
         uses: actions/github-script@v7
         env:
-          MATRIX: ${{ needs.determine-matrix.outputs.matrix }}
+          MATRIX: ${{ needs.determine-matrix.outputs.plan_matrix }}
         with:
           script: |
             const matrix = JSON.parse(process.env.MATRIX);
@@ -123,9 +130,9 @@ jobs:
                 repo: context.repo.repo,
                 run_id: context.runId,
               });
-              const planJobs = data.jobs.filter(j => j.name.startsWith('tf-plan'))
+              const planJobs = data.jobs.filter(j => j.name.startsWith('tf-plan-'))
               const lines = planJobs.map(j => {
-                const name = j.name.replace('tf-plan (environment: ', '').replace(')', '');
+                const name = j.name.replace('tf-plan-', '');
                 return `- ${name}: ${j.conclusion}`;
               });
               core.setOutput('summary', lines.join('\n'));
@@ -149,14 +156,15 @@ jobs:
 
   tf-apply:
     needs: [determine-matrix, tf-plan-summary]
-    if: github.event_name == 'push' && fromJSON(needs.determine-matrix.outputs.matrix)[0].name != 'skip'
+    if: github.event_name == 'push' && fromJSON(needs.determine-matrix.outputs.apply_matrix)[0].name != 'skip'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       max-parallel: 1
       matrix:
-        environment: ${{ fromJSON(needs.determine-matrix.outputs.matrix) }}
-    environment: ${{ matrix.environment.name }}
+        environment: ${{ fromJSON(needs.determine-matrix.outputs.apply_matrix) }}
+    name: tf-apply-${{ matrix.environment.name }}
+    environment: ${{ matrix.environment.github_environment }}
     permissions:
       actions: read
       checks: write

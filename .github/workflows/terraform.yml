@@ -6,16 +6,29 @@ on:
     branches: ["main"]
 
 jobs:
-  tf-plan:
+  determine-matrix:
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: set-matrix
+        run: |
+          matrix=$(yq e -o=json '.environments | sort_by(.order)' environments.yml 2>/dev/null || echo '[]')
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
+  tf-plan:
+    needs: determine-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: ${{ fromJSON(needs.determine-matrix.outputs.matrix) }}
     permissions:
       actions: read
       checks: write
       contents: read
       id-token: write
       pull-requests: write
-    outputs:
-      diff: ${{ steps.plan.outputs.diff }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -43,20 +56,25 @@ jobs:
         with:
           terraform_wrapper: false
 
-      - name: Terraform plan
-        id: plan
+      - name: Terraform plan ${{ matrix.environment.name }}
         uses: op5dev/tf-via-pr@v13
         with:
           working-directory: .
           command: plan
+          arg-var-file: env/${{ matrix.environment.name }}.tfvars
           plan-encrypt: ${{ secrets.TF_PASSPHRASE }}
           validate: true
           format: true
 
   tf-apply:
-    needs: tf-plan
-    if: github.event_name == 'push' && needs.tf-plan.outputs.diff != ''
+    needs: [determine-matrix, tf-plan]
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix:
+        environment: ${{ fromJSON(needs.determine-matrix.outputs.matrix) }}
+    environment: ${{ matrix.environment.name }}
     permissions:
       actions: read
       checks: write
@@ -90,12 +108,13 @@ jobs:
         with:
           terraform_wrapper: false
 
-      - name: Terraform apply
+      - name: Terraform apply ${{ matrix.environment.name }}
         uses: op5dev/tf-via-pr@v13
         with:
           working-directory: .
           command: apply
           arg-lock: true
+          arg-var-file: env/${{ matrix.environment.name }}.tfvars
           plan-encrypt: ${{ secrets.TF_PASSPHRASE }}
           validate: true
           format: true

@@ -30,7 +30,8 @@ The template will produce a new directory named after `repo_name` containing a s
 
 ## Developing the Template
 
-Changes to the template should ensure Terraform configuration remains valid. Run from within the templated project directory:
+
+Changes to the template should ensure Terraform configuration remains valid and pass all linting and static analysis checks. Run from within the templated project directory:
 
 ```bash
 cd {{cookiecutter.repo_name}}
@@ -39,3 +40,23 @@ terraform init -backend=false
 terraform validate
 cd ..
 ```
+
+### Additional Testing & Linting
+
+Before submitting changes, ensure the following tools are installed and run:
+
+```bash
+# Install linters
+pip install pyflakes
+sudo apt-get update && sudo apt-get install -y shellcheck
+curl -sSfL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash | bash
+curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+
+# Run actionlint (with shellcheck and pyflakes available)
+actionlint
+
+# Run tflint and resolve all issues with severity warning and above
+tflint --format=compact
+```
+
+Resolve all issues reported with severity warning or above before merging.

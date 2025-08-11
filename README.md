@@ -27,6 +27,7 @@ The template will produce a new directory named after `repo_name` containing a s
 
 - `cookiecutter.json` – template variables.
 - `{{cookiecutter.repo_name}}/` – full Terraform project ready to customize, including a GitHub Actions workflow.
+- `.provisioning/` – repository provisioning config and docs; `repository-config.yml` is the single source of truth for initial repository settings.
 
 ## Developing the Template
 

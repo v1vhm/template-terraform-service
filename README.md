@@ -43,20 +43,40 @@ cd ..
 
 ### Additional Testing & Linting
 
-Before submitting changes, ensure the following tools are installed and run:
+To test changes to the template, you should:
 
-```bash
-# Install linters
-pip install pyflakes
-sudo apt-get update && sudo apt-get install -y shellcheck
-curl -sSfL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash | bash
-curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+1. Install Cookiecutter if you haven't already, and use it to generate a new project in a temporary directory (e.g., `/tmp/test-template`):
 
-# Run actionlint (with shellcheck and pyflakes available)
-actionlint
+   ```bash
+   pip install --user cookiecutter
+   cookiecutter . --output-dir /tmp/test-template
+   cd /tmp/test-template/<your-repo-name>
+   ```
 
-# Run tflint and resolve all issues with severity warning and above
-tflint --format=compact
-```
+2. Install all linting tools in a temporary folder (do not pollute your global environment):
+
+   ```bash
+   TMP_LINT_DIR="/tmp/test-template-linters"
+   mkdir -p "$TMP_LINT_DIR"
+   python3 -m venv "$TMP_LINT_DIR/venv"
+   source "$TMP_LINT_DIR/venv/bin/activate"
+   pip install pyflakes
+   sudo apt-get update && sudo apt-get install -y shellcheck
+   curl -sSfL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash | bash -s -- -b "$TMP_LINT_DIR"
+   curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash -s -- -b "$TMP_LINT_DIR"
+   export PATH="$TMP_LINT_DIR:$PATH"
+   ```
+
+3. Run the linting tools from within the generated project directory:
+
+   ```bash
+   actionlint
+   tflint --format=compact
+   # Optionally run pyflakes and shellcheck on relevant files
+   pyflakes .
+   find . -name '*.sh' -exec shellcheck {} +
+   ```
+
+Resolve all issues reported with severity warning or above before merging.
 
 Resolve all issues reported with severity warning or above before merging.

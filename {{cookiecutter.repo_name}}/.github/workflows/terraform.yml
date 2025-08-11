@@ -1,3 +1,4 @@
+{% raw %}
 # yamllint disable rule:line-length
 ---
 name: Terraform
@@ -201,3 +202,4 @@ jobs:
           plan-encrypt: ${{ secrets.TF_PASSPHRASE }}
           validate: true
           format: true
+{% endraw %}

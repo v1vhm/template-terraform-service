@@ -1,26 +1,41 @@
-# Terraform Service Template
+# Terraform Service Cookiecutter Template
 
-This repository provides a baseline structure for managing Azure infrastructure with Terraform and Port. It includes core configuration files, placeholders for environment variable sets and reusable modules, and CI/CD workflow scaffolding.
+This repository packages a Terraform service as a [Cookiecutter](https://cookiecutter.readthedocs.io/) template. It scaffolds a baseline for managing Azure infrastructure and includes a GitHub Actions workflow and common Terraform configuration files.
 
-## Repository Layout
+## Quickstart
 
-- **main.tf** – Entry point for resources and module calls.
-- **variables.tf** – Shared variable declarations.
-- **outputs.tf** – Shared output values.
-- **providers.tf** – Terraform version and required providers (AzureRM and Port).
-- **backend.tf** – Template for remote state configuration.
-- **env/** – Placeholder for environment-specific variable directories (see `env/README.md`).
-- **modules/** – Placeholder for reusable modules with an example module (`modules/example/`).
-- **.github/workflows/** – GitHub Actions workflow for Terraform plan and apply via pull requests.
-- **.github/dependabot.yml** – Dependabot configuration for Terraform and GitHub Actions updates.
+1. Install Cookiecutter if you haven't:
 
-Update these files with real infrastructure definitions as the project evolves.
+   ```bash
+   pip install cookiecutter
+   ```
 
-## Required Secrets
+2. Generate a new project:
 
-Authentication uses GitHub OIDC; no Azure client secret is required.
+   ```bash
+   cookiecutter gh:ORG_NAME/template-terraform-service
+   ```
 
-- **AZURE_CLIENT_ID** – Service principal client ID for Azure login.
-- **AZURE_TENANT_ID** – Azure Active Directory tenant ID.
-- **AZURE_SUBSCRIPTION_ID** – Target Azure subscription ID.
-- **TF_PASSPHRASE** – Used to encrypt Terraform plan files in the GitHub Actions workflow.
+3. Follow the prompts for:
+   - `project_name` – human readable name of your service.
+   - `repo_name` – repository folder name derived from `project_name`.
+   - `description` – short summary of the service.
+
+The template will produce a new directory named after `repo_name` containing a starter Terraform configuration.
+
+## What's Included
+
+- `cookiecutter.json` – template variables.
+- `{{cookiecutter.repo_name}}/` – full Terraform project ready to customize, including a GitHub Actions workflow.
+
+## Developing the Template
+
+Changes to the template should ensure Terraform configuration remains valid. Run from within the templated project directory:
+
+```bash
+cd {{cookiecutter.repo_name}}
+terraform fmt -check
+terraform init -backend=false
+terraform validate
+cd ..
+```

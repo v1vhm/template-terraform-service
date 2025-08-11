@@ -1,0 +1,5 @@
+{
+  "project_name": "Terraform Service Template",
+  "repo_name": "{{ cookiecutter.project_name.lower().replace(' ', '-') }}",
+  "description": "Baseline structure for managing Azure infrastructure with Terraform and Port."
+}

@@ -1,6 +1,8 @@
-# Terraform Service Template
+# {{ cookiecutter.project_name }}
 
-This repository provides a baseline structure for managing Azure infrastructure with Terraform and Port. It includes core configuration files, placeholders for environment variable sets and reusable modules, and CI/CD workflow scaffolding.
+{{ cookiecutter.description }}
+
+It includes core configuration files, placeholders for environment variable sets and reusable modules, and CI/CD workflow scaffolding.
 
 ## Repository Layout
 

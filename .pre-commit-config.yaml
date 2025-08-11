@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: validate-provisioning-config
+        name: Validate provisioning repository-config.yml
+        entry: .provisioning/validate_config.py
+        language: python
+        additional_dependencies: [pyyaml, jsonschema]
+        files: ^\.provisioning/repository-config\.yml$

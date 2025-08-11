@@ -62,3 +62,13 @@ secrets:             # -> github_actions_secret (value supplied by workflow env)
 1. Update [`repository-config.yml`](repository-config.yml) with the desired settings.
 2. Run your organization's provisioning tooling to apply the configuration when creating the repository.
 3. Updates only affect repositories created after the change; existing repositories are not modified.
+
+## Validation
+
+To catch configuration errors early, validate `repository-config.yml` against its schema:
+
+```bash
+python validate_config.py
+```
+
+This helper script was added as part of the task to ensure repository provisioning data remains consistent.

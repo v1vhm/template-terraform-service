@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["version"],
+  "properties": {
+    "version": {"type": "integer", "enum": [1]},
+    "repository": {
+      "type": "object",
+      "properties": {
+        "topics": {"type": "array", "items": {"type": "string"}},
+        "visibility": {"type": "string", "enum": ["public", "private", "internal"]},
+        "description": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "rulesets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "target", "enforcement", "conditions", "rules"],
+        "properties": {
+          "name": {"type": "string"},
+          "target": {"type": "string", "enum": ["branch"]},
+          "enforcement": {"type": "string", "enum": ["active", "evaluate", "disabled"]},
+          "conditions": {
+            "type": "object",
+            "properties": {
+              "ref_name": {
+                "type": "object",
+                "properties": {
+                  "include": {"type": "array", "items": {"type": "string"}},
+                  "exclude": {"type": "array", "items": {"type": "string"}}
+                },
+                "required": ["include", "exclude"],
+                "additionalProperties": false
+              }
+            },
+            "required": ["ref_name"],
+            "additionalProperties": false
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["type"],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "deletion",
+                    "non_fast_forward",
+                    "pull_request",
+                    "code_scanning",
+                    "required_status_checks"
+                  ]
+                },
+                "parameters": {"type": "object", "additionalProperties": true}
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "labels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "color", "description"],
+        "properties": {
+          "name": {"type": "string"},
+          "color": {"type": "string", "pattern": "^[0-9a-fA-F]{6}$"},
+          "description": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "teams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["team", "permission"],
+        "properties": {
+          "team": {"type": "string"},
+          "permission": {
+            "type": "string",
+            "enum": ["pull", "push", "maintain", "triage", "admin"]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "value"],
+        "properties": {
+          "name": {"type": "string"},
+          "value": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "secrets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "source", "ref"],
+        "properties": {
+          "name": {"type": "string"},
+          "source": {"type": "string", "enum": ["workflow_secret", "env", "none"]},
+          "ref": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

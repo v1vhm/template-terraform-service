@@ -200,7 +200,7 @@ variable "secret_values" {
 * `port_cost_centre`
 * `port_owning_team`
 * `port_owning_team_identifier`
-* `repo_name` (slug)
+* `project_slug` (slug)
 * (plus any existing vars your template already uses)
 
 # 8) Agent task cards (copy/paste to run work)

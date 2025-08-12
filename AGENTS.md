@@ -1,6 +1,6 @@
 # AGENTS
 
-- **Run Terraform checks** from within the templated project directory `{{cookiecutter.repo_name}}`:
+- **Run Terraform checks** from within the templated project directory `{{cookiecutter.project_slug}}`:
   ```bash
   terraform fmt -check
   terraform init -backend=false
@@ -8,7 +8,7 @@
   ```
   Remove the generated `.terraform` directory afterward.
 - **Workflow files**: wrap `${{ }}` expressions in `{% raw %}` and `{% endraw %}` to prevent Cookiecutter from rendering them.
-- **Template structure**: keep all project files inside `{{cookiecutter.repo_name}}` and use the `repo_name` variable instead of `project_slug`.
+- **Template structure**: keep all project files inside `{{cookiecutter.project_slug}}` and use the `project_slug` variable.
 
 These instructions apply to the entire repository.
 
@@ -22,7 +22,7 @@ To test changes to the template:
   ```bash
   pip install --user cookiecutter
   cookiecutter . --output-dir /tmp/test-template
-  cd /tmp/test-template/<your-repo-name>
+  cd /tmp/test-template/<your-project-slug>
   ```
 
 2. Install all linting tools in a temporary folder (do not pollute your global environment):

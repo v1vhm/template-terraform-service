@@ -18,15 +18,15 @@ This repository packages a Terraform service as a [Cookiecutter](https://cookiec
 
 3. Follow the prompts for:
    - `project_name` – human readable name of your service.
-   - `repo_name` – repository folder name derived from `project_name`.
+   - `project_slug` – repository folder name derived from `project_name`.
    - `description` – short summary of the service.
 
-The template will produce a new directory named after `repo_name` containing a starter Terraform configuration.
+The template will produce a new directory named after `project_slug` containing a starter Terraform configuration.
 
 ## What's Included
 
 - `cookiecutter.json` – template variables.
-- `{{cookiecutter.repo_name}}/` – full Terraform project ready to customize, including a GitHub Actions workflow.
+- `{{cookiecutter.project_slug}}/` – full Terraform project ready to customize, including a GitHub Actions workflow.
 - `.provisioning/` – repository provisioning config and docs; `repository-config.yml` is the single source of truth for initial repository settings.
 
 ## Developing the Template
@@ -35,7 +35,7 @@ The template will produce a new directory named after `repo_name` containing a s
 Changes to the template should ensure Terraform configuration remains valid and pass all linting and static analysis checks. Run from within the templated project directory:
 
 ```bash
-cd {{cookiecutter.repo_name}}
+cd {{cookiecutter.project_slug}}
 terraform fmt -check
 terraform init -backend=false
 terraform validate
@@ -51,7 +51,7 @@ To test changes to the template, you should:
    ```bash
    pip install --user cookiecutter
    cookiecutter . --output-dir /tmp/test-template
-   cd /tmp/test-template/<your-repo-name>
+   cd /tmp/test-template/<your-project-slug>
    ```
 
 2. Install all linting tools in a temporary folder (do not pollute your global environment):
@@ -77,7 +77,5 @@ To test changes to the template, you should:
    pyflakes .
    find . -name '*.sh' -exec shellcheck {} +
    ```
-
-Resolve all issues reported with severity warning or above before merging.
 
 Resolve all issues reported with severity warning or above before merging.

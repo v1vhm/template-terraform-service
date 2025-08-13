@@ -1,5 +1,5 @@
 blueprint: service_template
-title: Terraform
+title: Terraform Template
 identifier: terraform_template
 properties:
   readme: file://README.md

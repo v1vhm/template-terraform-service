@@ -4,5 +4,6 @@ identifier: terraform_template
 properties:
   readme: file://README.md
   cookiecutter_properties: file://cookiecutter.json
+  repository_configuration: file://.provisioning/repository-config.yml
 relations:
   git_hub_repository: v1vhm/template-terraform-service

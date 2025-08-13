@@ -1,5 +1,11 @@
 {
-  "project_name": "Terraform Service Template",
-  "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '-') }}",
-  "description": "Baseline structure for managing Azure infrastructure with Terraform and Port."
+  "port_service_name": "Port service display name",
+  "port_service_identifier": "port-service-id",
+  "port_repository_identifier": "owner/repository",
+  "port_cost_centre": "cc-0000",
+  "port_owning_team": "owning-team-name",
+  "port_owning_team_identifier": "owning-team-id",
+  "description": "Baseline structure for managing Azure infrastructure with Terraform and Port.",
+  "project_name": "{{ cookiecutter.port_service_name }}",
+  "project_slug": "{{ cookiecutter.port_repository_identifier.split('/')[-1] }}"
 }

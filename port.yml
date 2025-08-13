@@ -5,4 +5,4 @@ properties:
   readme: file://README.md
   cookiecutter_properties: file://cookiecutter.json
 relations:
-  git_hub_repository_identifier: v1vhm/template-terraform-service
+  git_hub_repository: v1vhm/template-terraform-service

@@ -1,5 +1,8 @@
 name: cookiecutter
 
+permissions:
+  contents: read
+
 on:
   push:
     paths:

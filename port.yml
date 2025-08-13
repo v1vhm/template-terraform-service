@@ -1,0 +1,6 @@
+blueprint: service_template
+title: Terraform
+identifier: terraform_template
+properties:
+  readme: file://README.md
+  cookiecutter_properties: file://cookiecutter.json

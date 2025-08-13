@@ -19,7 +19,16 @@ This repository packages a Terraform service as a [Cookiecutter](https://cookiec
 3. Follow the prompts for:
    - `project_name` – human readable name of your service.
    - `project_slug` – repository folder name derived from `project_name`.
+   - `repo_name` – Git repository name; defaults to `project_slug`.
    - `description` – short summary of the service.
+   - `port_service_name` – display name for the service in Port.
+   - `port_service_identifier` – unique service identifier in Port.
+   - `port_repository_identifier` – Port entity identifier for this repository.
+   - `port_cost_centre` – cost centre or billing code.
+   - `port_owning_team` – team responsible for the service.
+   - `port_owning_team_identifier` – unique identifier for the owning team in Port.
+
+These Port-related values surface in `.provisioning/repository-config.yml` during repository provisioning.
 
 The template will produce a new directory named after `project_slug` containing a starter Terraform configuration.
 

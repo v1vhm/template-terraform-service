@@ -4,6 +4,19 @@
 
 It includes core configuration files, placeholders for environment variable sets and reusable modules, and CI/CD workflow scaffolding.
 
+## Port Metadata
+
+This project captures several Port-related attributes during generation:
+
+- `{{ cookiecutter.port_service_name }}` – display name for the service in Port.
+- `{{ cookiecutter.port_service_identifier }}` – unique identifier for the service.
+- `{{ cookiecutter.port_repository_identifier }}` – Port entity identifier for this repository.
+- `{{ cookiecutter.port_cost_centre }}` – cost centre or billing code.
+- `{{ cookiecutter.port_owning_team }}` – owning team name.
+- `{{ cookiecutter.port_owning_team_identifier }}` – unique identifier for the owning team.
+
+These values surface in `.provisioning/repository-config.yml` when provisioning the repository.
+
 ## Repository Layout
 
 - **main.tf** – Entry point for resources and module calls.

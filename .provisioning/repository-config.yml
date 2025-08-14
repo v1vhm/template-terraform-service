@@ -1,7 +1,6 @@
 version: 1
 repository:
   topics: ["terraform","service","platform"]
-  description: "Terraform-based service scaffold"
 rulesets:
   - name: "trunk-based-for-terraform"
     target: "branch"
@@ -31,20 +30,6 @@ rulesets:
           do_not_enforce_on_create: true
           required_status_checks:
             - context: "tf-plan-summary"
-labels:
-  - name: "bug"
-    color: "d73a4a"
-    description: "Bug or defect"
-  - name: "enhancement"
-    color: "a2eeef"
-    description: "New feature or request"
-teams:
-  - team: "developers"
-    permission: "push"
-variables:
-  - name: "ENVIRONMENT"
-    value: "dev"
-secrets:
-  - name: "CLOUD_KV_URI"
+  - name: "TF_PASSPHRASE"
     source: "workflow_secret"
-    ref: "ORG_CLOUD_KV_URI"
+    ref: "TMP_PASSPHRASE"

@@ -1,6 +1,6 @@
 blueprint: service_template
 title: Terraform Template
-identifier: v1vhm/terraform_template
+identifier: terraform_service
 icon: Terraform
 properties:
   readme: file://README.md

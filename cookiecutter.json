@@ -2,12 +2,11 @@
   "port_service_name": "Port service display name",
   "port_service_identifier": "port-service-id",
   "port_service_description": "Description of the service supplied by Port",
-  "port_repository_identifier": "owner/repository",
   "port_cost_centre": "cc-0000",
   "port_owning_team": "owning-team-name",
   "port_owning_team_identifier": "owning-team-id",
   "user_some_variable": "Some user defined variable for testing",
   "description": "{{ cookiecutter.port_service_description }}",
   "project_name": "{{ cookiecutter.port_service_name }}",
-  "project_slug": "{{ cookiecutter.port_repository_identifier.split('/')[-1] }}"
+  "project_slug": "{{ cookiecutter.port_service_identifier }}"
 }

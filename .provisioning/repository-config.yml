@@ -30,6 +30,7 @@ rulesets:
           do_not_enforce_on_create: true
           required_status_checks:
             - context: "tf-plan-summary"
+secrets:
   - name: "TF_PASSPHRASE"
     source: "workflow_secret"
     ref: "TMP_PASSPHRASE"

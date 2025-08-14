@@ -1,6 +1,6 @@
 blueprint: service_template
 title: Terraform Template
-identifier: terraform_template
+identifier: v1vhm/terraform_template
 properties:
   readme: file://README.md
   cookiecutter_properties: file://cookiecutter.json

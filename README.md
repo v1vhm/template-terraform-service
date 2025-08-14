@@ -20,7 +20,6 @@ This repository packages a Terraform service as a [Cookiecutter](https://cookiec
    - `description` – short summary of the service.
    - `port_service_name` – display name for the service in Port.
    - `port_service_identifier` – unique service identifier in Port.
-   - `port_repository_identifier` – Port entity identifier for this repository, in the format `<owner>/<repository>`.
    - `port_cost_centre` – cost centre or billing code.
    - `port_owning_team` – team responsible for the service.
    - `port_owning_team_identifier` – unique identifier for the owning team in Port.

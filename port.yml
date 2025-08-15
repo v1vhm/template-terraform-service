@@ -1,6 +1,7 @@
 blueprint: service_template
 title: Terraform Template
-identifier: terraform_template
+identifier: terraform_service
+icon: Terraform
 properties:
   readme: file://README.md
   cookiecutter_properties: file://cookiecutter.json

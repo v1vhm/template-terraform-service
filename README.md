@@ -17,26 +17,33 @@ This repository packages a Terraform service as a [Cookiecutter](https://cookiec
    ```
 
 3. Follow the prompts for:
-   - `description` – short summary of the service.
+   - `port_product_identifier` – product the service belongs to in Port.
    - `port_service_name` – display name for the service in Port.
-   - `port_service_identifier` – unique service identifier in Port.
-   - `port_repository_identifier` – Port entity identifier for this repository, in the format `<owner>/<repository>`.
+   - `port_service_identifier` – unique service identifier and repository name.
+   - `port_service_description` – short summary of the service.
    - `port_cost_centre` – cost centre or billing code.
+   - `port_repo_owner` – GitHub organisation or user owning the repository.
+   - `port_repo_visibility` – repository visibility.
    - `port_owning_team` – team responsible for the service.
    - `port_owning_team_identifier` – unique identifier for the owning team in Port.
+   - `port_owning_team_slug` – GitHub slug of the owning team.
+   - `port_owner_team_permission` – permission granted to the owning team.
+
+`description` defaults to `port_service_description` and can be customised if needed.
 
 The template reserves the `port_` prefix for values supplied automatically by Port. Any variables that should be provided directly by the user must use the `user_` prefix in `cookiecutter.json`.
 
 `project_name` is set to `port_service_name`, and `project_slug` uses the repository portion of `port_repository_identifier`.
 
-These Port-related values surface in `.provisioning/repository-config.yml` during repository provisioning.
+These Port-related values surface in `.provisioning/repository-config.yml` during repository provisioning and populate `port.yml` for upserting metadata into Port.
 
-The template will produce a new directory named after the repository from `port_repository_identifier` containing a starter Terraform configuration.
+The template will produce a new directory named after `port_service_identifier` containing a starter Terraform configuration.
 
 ## What's Included
 
 - `cookiecutter.json` – template variables.
 - `{{cookiecutter.project_slug}}/` – full Terraform project ready to customize, including a GitHub Actions workflow.
+- `{{cookiecutter.project_slug}}/port.yml` – Port entities describing the repository and service.
 - `.provisioning/` – repository provisioning config and docs; `repository-config.yml` is the single source of truth for initial repository settings.
 
 ## Developing the Template

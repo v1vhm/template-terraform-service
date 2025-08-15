@@ -7,7 +7,7 @@
   "port_owning_team": "owning-team-name",
   "port_owning_team_identifier": "owning-team-id",
   "user_some_variable": "Some user defined variable for testing",
-  "description": "{{ cookiecuter.port_service_description }}",
+  "description": "{{ cookiecutter.port_service_description }}",
   "project_name": "{{ cookiecutter.port_service_name }}",
   "project_slug": "{{ cookiecutter.port_repository_identifier.split('/')[-1] }}"
 }

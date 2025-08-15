@@ -25,6 +25,8 @@ This repository packages a Terraform service as a [Cookiecutter](https://cookiec
    - `port_owning_team` – team responsible for the service.
    - `port_owning_team_identifier` – unique identifier for the owning team in Port.
 
+The template reserves the `port_` prefix for values supplied automatically by Port. Any variables that should be provided directly by the user must use the `user_` prefix in `cookiecutter.json`.
+
 `project_name` is set to `port_service_name`, and `project_slug` uses the repository portion of `port_repository_identifier`.
 
 These Port-related values surface in `.provisioning/repository-config.yml` during repository provisioning.

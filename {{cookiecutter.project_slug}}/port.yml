@@ -1,26 +1,26 @@
 - identifier: {{ cookiecutter.port_repo_owner | lower }}/{{ cookiecutter.port_service_identifier | lower }}
-  title: {{ cookiecutter.port_service_identifier | lower }}
+  title: {{ cookiecutter.port_service_identifier }}
   blueprint: githubRepository
   properties:
     readme: file://README.md
-    url: https://github.com/{{ cookiecutter.port_repo_owner | lower }}/{{ cookiecutter.port_service_identifier | lower }}
+    url: https://github.com/{{ cookiecutter.port_repo_owner }}/{{ cookiecutter.port_service_identifier }}
     defaultBranch: main
     visibility: {{ cookiecutter.port_repo_visibility }}
-    sshUrl: ssh://github.com/{{ cookiecutter.port_repo_owner | lower }}/{{ cookiecutter.port_service_identifier | lower }}.git
+    sshUrl: ssh://github.com/{{ cookiecutter.port_repo_owner }}/{{ cookiecutter.port_service_identifier }}.git
   relations:
     githubTeams:
-      - {{ cookiecutter.port_owning_team_slug | lower }}
+      - {{ cookiecutter.port_owning_team_slug }}
 - identifier: {{ cookiecutter.port_service_identifier | lower }}
   title: {{ cookiecutter.port_service_name }}
   blueprint: service
   teams:
-  - {{ cookiecutter.port_owning_team_slug | lower }}
+  - {{ cookiecutter.port_owning_team_slug }}
   icon: Terraform
   properties:
     short_name: {{ cookiecutter.port_service_name }}
   relations:
-    product: {{ cookiecutter.port_product_identifier | lower }}
-    repository: {{ cookiecutter.port_repo_owner | lower }}/{{ cookiecutter.port_service_identifier | lower }}
+    product: {{ cookiecutter.port_product_identifier }}
+    repository: {{ cookiecutter.port_repo_owner }}/{{ cookiecutter.port_service_identifier }}
     service_template: terraform_service
     service_cost_centre: "{{ cookiecutter.port_cost_centre }}"
 

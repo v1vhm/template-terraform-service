@@ -13,5 +13,5 @@
   "user_some_variable": "Some user defined variable for testing",
   "description": "{{ cookiecutter.port_service_description }}",
   "project_name": "{{ cookiecutter.port_service_name }}",
-  "project_slug": "{{ cookiecutter.port_service_identifier | lower }}"
+  "project_slug": "{{ cookiecutter.port_service_identifier }}"
 }

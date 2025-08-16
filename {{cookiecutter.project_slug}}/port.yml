@@ -1,4 +1,4 @@
-- identifier: {{ cookiecutter.port_repo_owner }}/{{ cookiecutter.port_service_identifier }}
+- identifier: {{ cookiecutter.port_repo_owner | lower }}/{{ cookiecutter.port_service_identifier | lower }}
   title: {{ cookiecutter.port_service_identifier }}
   blueprint: githubRepository
   properties:
@@ -10,7 +10,7 @@
   relations:
     githubTeams:
       - {{ cookiecutter.port_owning_team_slug }}
-- identifier: {{ cookiecutter.port_service_identifier }}
+- identifier: {{ cookiecutter.port_service_identifier | lower }}
   title: {{ cookiecutter.port_service_name }}
   blueprint: service
   teams:

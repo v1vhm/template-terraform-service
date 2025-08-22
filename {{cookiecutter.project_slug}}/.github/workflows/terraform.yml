@@ -1,4 +1,5 @@
 {% raw %}
+
 # yamllint disable rule:line-length
 ---
 name: Terraform
@@ -42,8 +43,8 @@ jobs:
             echo 'plan_matrix=[{"name":"skip","github_environment":"skip"}]' >> "$GITHUB_OUTPUT"
             echo 'apply_matrix=[{"name":"skip","github_environment":"skip"}]' >> "$GITHUB_OUTPUT"
           else
-            plan=$(echo "$matrix" | jq '[.[] | {name: .name, github_environment: (.name + "-plan")}]')
-            apply=$(echo "$matrix" | jq '[.[] | {name: .name, github_environment: (.name + "-apply")}]')
+            plan=$(echo "$matrix" | jq -c '[.[] | {name: .name, github_environment: (.name + "-plan")}]')
+            apply=$(echo "$matrix" | jq -c '[.[] | {name: .name, github_environment: (.name + "-apply")}]')
             echo "plan_matrix=$plan" >> "$GITHUB_OUTPUT"
             echo "apply_matrix=$apply" >> "$GITHUB_OUTPUT"
           fi
@@ -147,11 +148,19 @@ jobs:
             });
       - name: Log summary
         if: github.event_name != 'pull_request'
-        run: echo "${{ steps.summary.outputs.summary }}"
-
+        env:
+          SUMMARY: ${{ steps.summary.outputs.summary }}
+        run: |
+          echo "${SUMMARY:-'- summary: null'}"
+      - name: Log condition
+        if: ${{ github.event_name == 'push' && fromJSON(needs.determine-matrix.outputs.apply_matrix)[0].name != 'skip' }}
+        run: |
+          echo "We're here, I guess"
+          
   tf-apply:
     needs: [determine-matrix, tf-plan-summary]
-    if: github.event_name == 'push' && fromJSON(needs.determine-matrix.outputs.apply_matrix)[0].name != 'skip'
+    if: ${{ always() && github.event_name == 'push' && fromJSON(needs.determine-matrix.outputs.apply_matrix)[0].name != 'skip' }}
+    
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
